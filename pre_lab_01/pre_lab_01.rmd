@@ -137,11 +137,11 @@ umd_courses |>
 
 Describe what you think each line of this code is doing below, based on the result:
 
-**Answer: the first line is selecting the umd_courses dataset.**
+**Answer: The first line is selecting the umd_courses dataset.**
 
-the second line is taking all the terms and grouping the results by them
+The second line is grouping the data by the terms.
 
-third and fourth line is adding up all the records in each
+The third and fourth line is adding up all the classes in each term.
 
 ### Task 10: Adding arrange to sort the data
 
@@ -156,7 +156,7 @@ umd_courses |>
   arrange(desc(count_classes))
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? **Answer**
+Compared to the previous codeblock, what has changed and how did that affect the result? **Answer: A new line was added that arranges the data by the number of classes per term. The data is listed in a descending order with the highest number of classes listed first.**
 
 ### Task 11: Grouping by multiple columns
 
@@ -173,7 +173,7 @@ umd_courses |>
 
 Compared to the previous codeblock, how did the output change and what in the code changed it?
 
-**Answer**
+**Answer: The number of classes is now divided by term and department. The comma between term and department allowed the change.**
 
 ### Task 12: Other summary functions
 
@@ -189,7 +189,7 @@ umd_courses |>
   arrange(desc(total_seats))
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? **Answer**
+Compared to the previous codeblock, what has changed and how did that affect the result? **Answer: The total number of seats for the classes is listed in addition to the class count and the term. The sum for the total number of seats is added to the code and it is only grouped by term.**
 
 ### Task 13: different kinds of summarizations
 
@@ -207,7 +207,7 @@ umd_courses |>
   arrange(desc(total_seats))
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? What do the top terms have in common? **Answer**
+Compared to the previous codeblock, what has changed and how did that affect the result? What do the top terms have in common? **Answer:**
 
 ### Task 14: more aggregations
 
