@@ -207,7 +207,7 @@ umd_courses |>
   arrange(desc(total_seats))
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? What do the top terms have in common? **Answer:**
+Compared to the previous codeblock, what has changed and how did that affect the result? What do the top terms have in common? **Answer: The mean number of seats and the median number of seats have been added to the code and are now displayed on the chart. Both charts are arranged by the total number of seats.**
 
 ### Task 14: more aggregations
 
@@ -229,7 +229,7 @@ umd_courses |>
 
 Compared to the previous codeblock, what has changed and how did that affect the result? How is the data sorted?
 
-**Answer**
+**Answer: The group by is changed from term to department, and the departments are now listed in the chart.**
 
 ### Task 12: Questions
 
@@ -237,8 +237,8 @@ No code here; I want you to provide three questions that this data suggests to y
 
 **Answer**
 
-1.  
+1.  Is it possible to target multiple data sets in a single line of code for finding sums and means of data?
 
-2.  
+2.  Which instructor has taught the most classes?
 
-3.  
+3.  Which term has the most classes?
