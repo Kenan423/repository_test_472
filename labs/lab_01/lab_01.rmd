@@ -40,7 +40,7 @@ umd_courses <- read_rds("lab_01.rds")
 ## Answer questions
 
 **Q1** Which department has the highest mean (average) number of seats for its classes? You need to show the department with the highest average first. Which one is the most surprising/interesting to you?
-**A1**
+**A1** Engineering, Cooperative Education is the most surprising because of how many more mean_seats it has compared to the next highest department.
 
 ```{r}
 umd_courses |>
@@ -63,15 +63,26 @@ title = n()
   arrange(desc(title))
 ```
 
-**Q3** Count the number of courses for each instructor and department. Which instructor has taught the most? **A3**
+**Q3** Count the number of courses for each instructor and department. Which instructor has taught the most? **A3** Elsa Barkley Brown has taught the most.
 
 ```{r}
-
+umd_courses |>
+  group_by(instructors) |>
+  summarise(
+id = n()
+  ) |>
+  arrange(desc(id))
 ```
 
-**Q4** Given the results for Q3, what would have made it easier to find the answer? You don't have to know *how* to accomplish this; I want you to describe in words what would make the answer easier to see. How confident are you that the answer you got is the right one, and why? **A4**
+**Q4** Given the results for Q3, what would have made it easier to find the answer? You don't have to know *how* to accomplish this; I want you to describe in words what would make the answer easier to see. How confident are you that the answer you got is the right one, and why? **A4** It would have been easier if I were able to see the department in addition to the number of classes for each instructor. I am confident that I got the correct number of classes for each professor, but I am not sure how to display the departments while maintaining the list of instructors and classes.
 
-**Q5** Take one of the questions you listed in the final question of the pre_lab and try to answer it here in code. If you don't know how to fully answer it, write what code you can and describe in words what else you would need to do. If you got an answer, is it interesting? **A5**
+**Q5** Take one of the questions you listed in the final question of the pre_lab and try to answer it here in code. If you don't know how to fully answer it, write what code you can and describe in words what else you would need to do. If you got an answer, is it interesting? **A5** I am having difficulty trying to arrange the data in a descending order for multiple columns.
 
 ```{r}
+umd_courses |>
+  group_by(term, department) |>
+  summarise(
+    count_classes = n()
+  ) |>
+  arrange(term, department)
 ```

@@ -221,8 +221,8 @@ umd_courses |>
     total_seats = sum(seats),
     mean_seats = mean(seats),
     median_seats = median(seats),
-    # add minimum seats here
-    # add maximum seats here
+    min(seats),
+    max(seats)
   ) |>
   arrange(desc(total_seats))
 ```
