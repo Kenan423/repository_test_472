@@ -152,6 +152,10 @@ earthquakes |>
 
 ```{r}
 
+earthquakes <- earthquakes |>
+  mutate(serious = case_when(mag > 3 ~ 'Serious',
+  .default = 'Not serious'))
+
 ```
 
 **A11:**
