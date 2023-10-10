@@ -46,7 +46,7 @@ Most questions have a code block and a space for an answer below. Write the code
 
 #### **Q2** How many records there are there in this dataset? What do they mean and what useful information we can gather from it, looking at the columns?
 
-**A2:** There are 9777 records of seismic activity. They are differentiated between earthquakes and quarry blasts and have information about where and when they took place.
+**A2:** There are 9777 records of seismic activity. They are differentiated between earthquakes and other seismic activity and have information about where and when they took place.
 
 ------------------------------------------------------------------------
 
@@ -134,7 +134,7 @@ earthquakes |>
 
 ```
 
-**A9:**
+**A9:** 
 
 ------------------------------------------------------------------------
 
