@@ -25,7 +25,18 @@ Enrollment.type |
 
 
 
+  
+  
+  
+  enrollment_changes |>
+  filter(enrollment_type == 'Public school enrollment' | enrollment_type == 'Total nonpublic enrollment (private + homeschool)') |>
+  filter(state_abbrev == 'CA') |>
+  reframe(state_abbrev, sum(total_change))
 
+
+school_aged_population_changes |> 
+  filter(state == 'California') |>
+  reframe(state, change_in_school_aged_population_5_17) 
 
 
 
