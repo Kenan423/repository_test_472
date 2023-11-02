@@ -1,0 +1,167 @@
+---
+title: "Reverse Engineering Project"
+author: "Kenan Grier, Marissa Yelenik, Matthew Kiras, Nicholas Wolcott"
+date: "Date here"
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+In this notebook, we are reverse engineering the story, Thousands of kids are missing from school. Where did they go? (<https://projects.apnews.com/features/2023/missing-children/index.html>)
+
+## Load libraries
+
+Loading required libraries for this analysis.
+
+```{r echo=FALSE, message=FALSE}
+library(tidyverse)
+library(janitor)
+library(lubridate)
+
+
+```
+
+## Load and Cleaning Data
+
+In this section, describe the source of the data, write a basic data dictionary for data you are working with, and discuss any caveats or issues you discovered working with this data.
+
+```{r}
+# Load required data
+
+population_by_age <- population_by_age |>
+  clean_names()
+private_enrollment_by_grade <- private_enrollment_by_grade |>
+  clean_names()
+public_enrollment_by_grade <- public_enrollment_by_grade |>
+  clean_names() 
+missing_kids_analysis <- Missing_Kids_Analysis |>
+  clean_names()
+school_aged_population_changes <- School_Aged_Population_Changes |>
+  clean_names()
+enrollment_changes <- Enrollment_Changes |>
+  clean_names()
+
+
+# Path to data should be loaded from folder "data" i.e. read_csv("data/name_of_data.csv")
+
+# Clean required data and prepare for analysis if needed. 
+
+
+```
+
+## Sentences to Engineer
+
+In this notebook, we are reverse engineering five sentences from the story.
+
+### Sentence 1
+
+-   **Sentence text**: "Overall, public school enrollment fell by over 700,000 students between the 2019-2020 and 2021-2022 school years in the 21 states plus Washington, D.C., that provided the necessary data."
+-   **Analysis summary**: We utilized data from the data set 'enrollment_changes' and compared it to the data set 'missing_kids_analysis'. We were able to find the number of children who left public schools between the 2019-2020 and 2021-2022 school years, and it matched the number featured in the story.
+
+```{r}
+# Put code to reverse engineer sentence here
+
+enrollment_changes |>
+  filter(enrollment_type == 'Public school enrollment') |>
+  filter(state_abbrev == 'CA' | state_abbrev == 'NY' | state_abbrev == 'LA' | state_abbrev == 'NC' | state_abbrev == 'WA' | state_abbrev == 'CO' | state_abbrev == 'GA' | state_abbrev == 'MN' | state_abbrev == 'WI' | state_abbrev == 'NH' | state_abbrev == 'MA' | state_abbrev == 'MT' | state_abbrev == 'DE' | state_abbrev == 'ND' | state_abbrev == 'DC' | state_abbrev == 'SD' | state_abbrev == 'SC' | state_abbrev == 'NE' | state_abbrev == 'RI' | state_abbrev == 'TN' | state_abbrev == 'PA' | state_abbrev == 'FL') |>
+  summarise(sum(total_change))
+  
+
+# Display results of code below this codeblock
+
+```
+
+### Sentence 2
+
+-   **Sentence text**: "Those states saw private-school enrollment grow by over 100,000 students. Home-schooling grew even more, surging by more than 180,000" from 2019-2020 to 2021-2022.
+-   **Analysis summary**: We used the enrollment_changes data set to find the differences is private/homeschooled kids between the 2019 school year and the 2021 school year, confirming the private school enrollment did grow by over 100,000 students and home-schooling did grow by over 180,000 students.
+
+```{r}
+# Put code to reverse engineer sentence here
+
+enrollment_changes |>
+  filter(enrollment_type == 'Private enrollment') |>
+  filter(state_abbrev == 'CA' | state_abbrev == 'NY' | state_abbrev == 'LA' | state_abbrev == 'NC' | state_abbrev == 'WA' | state_abbrev == 'CO' | state_abbrev == 'GA' | state_abbrev == 'MN' | state_abbrev == 'WI' | state_abbrev == 'NH' | state_abbrev == 'MA' | state_abbrev == 'MT' | state_abbrev == 'DE' | state_abbrev == 'ND' | state_abbrev == 'DC' | state_abbrev == 'SD' | state_abbrev == 'SC' | state_abbrev == 'NE' | state_abbrev == 'RI' | state_abbrev == 'TN' | state_abbrev == 'PA' | state_abbrev == 'FL') |>
+  summarize(sum(total_change))
+  
+
+enrollment_changes |>
+  filter(enrollment_type == 'Homeschool enrollment') |>
+  filter(state_abbrev == 'CA' | state_abbrev == 'NY' | state_abbrev == 'LA' | state_abbrev == 'NC' | state_abbrev == 'WA' | state_abbrev == 'CO' | state_abbrev == 'GA' | state_abbrev == 'MN' | state_abbrev == 'WI' | state_abbrev == 'NH' | state_abbrev == 'MA' | state_abbrev == 'MT' | state_abbrev == 'DE' | state_abbrev == 'ND' | state_abbrev == 'DC' | state_abbrev == 'SD' | state_abbrev == 'SC' | state_abbrev == 'NE' | state_abbrev == 'RI' | state_abbrev == 'TN' | state_abbrev == 'PA' | state_abbrev == 'FL') |>
+  summarize(sum(total_change))
+
+```
+
+### Sentence 3
+
+-   **Sentence text**: California alone showed over 150,00 missing student in the data, and New York had nearly 60,000.
+-   **Analysis summary**: 
+
+```{r}
+# Put code to reverse engineer sentence here
+public_enrollment_changes <- enrollment_changes |>
+  filter(enrollment_type == 'Public school enrollment') |>
+  filter(state_abbrev == 'CA' | state_abbrev == 'NY') |>
+  select(state,total_change)
+
+nonpublic_enrollment_changes <- enrollment_changes |>
+  filter(enrollment_type == 'Total nonpublic enrollment (private + homeschool)') |>
+  filter(state_abbrev == 'CA' | state_abbrev == 'NY') |>
+  select(state,total_change)
+
+enrollment_changes_ca_ny <- nonpublic_enrollment_changes |>
+  inner_join(public_enrollment_changes, by ='state')
+
+school_age_change <- school_aged_population_changes |>
+  filter(state == 'California' | state == 'New York') |>
+  select(state,change_in_school_aged_population_5_17)
+
+age_enrollment_change <- enrollment_changes_ca_ny |>
+  inner_join(school_age_change, by = 'state') |>
+  rename(public_enrollment_change = total_change.x) |>
+  rename(nonpublic_enrollment_change = total_change.y)|>
+  mutate(total_state_change = (public_enrollment_change + nonpublic_enrollment_change - change_in_school_aged_population_5_17))
+  
+
+```
+
+### Sentence 4
+
+-   **Sentence text**: An analysis by The Associated Press, Stanford Univeristy's Big Local News project and Stanford education professor Thomas Dee found an estimated 230,000 students in 21 states whose absences could not be accounted for.
+-   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+
+```{r}
+# Put code to reverse engineer sentence here
+
+age_enrollment_change |>
+  ggplot() + geom_bar()
+
+
+# Display results of code below this codeblock
+
+```
+
+### Sentence 5
+
+-   **Sentence text**: The population of school-age kids in the states we studied fell by about 183,000 according to census estimates.
+-   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+
+```{r}
+# Put code to reverse engineer sentence here
+
+# Display results of code below this codeblock
+
+```
+
+-30-

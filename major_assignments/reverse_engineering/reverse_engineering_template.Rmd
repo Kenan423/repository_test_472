@@ -73,16 +73,19 @@ In this notebook, we are reverse engineering five sentences from the story.
 * **Sentence text**: "Overall, public school enrollment fell by over 700,000 students between the 2019-2020 and 2021-2022 school years in the 21 states plus Washington, D.C., that provided the necessary data."
 * **Analysis summary**: We utilized data from the data set 'enrollment_changes' and compared it to the data set 'missing_kids_analysis'. We were able to find the number of children who left public schools between the 2019-2020 and 2021-2022 school years, and it matched the number featured in the story.
 
+#don't use so many mutates. Simplify
+
+
 ```{r}
 # Put code to reverse engineer sentence here
 
 enrollment_changes |>
-  group_by(enrollment_type) |>
+ 
   filter(enrollment_type == 'Public school enrollment') |>
   filter(state_abbrev == 'CA' | state_abbrev == 'NY' | state_abbrev == 'LA' | state_abbrev == 'NC' | state_abbrev == 'WA' | state_abbrev == 'CO' | state_abbrev == 'GA' | state_abbrev == 'MN' | state_abbrev == 'WI' | state_abbrev == 'NH' | state_abbrev == 'MA' | state_abbrev == 'MT' | state_abbrev == 'DE' | state_abbrev == 'ND' | state_abbrev == 'DC' | state_abbrev == 'SD' | state_abbrev == 'SC' | state_abbrev == 'NE' | state_abbrev == 'RI' | state_abbrev == 'TN' | state_abbrev == 'PA' | state_abbrev == 'FL') |>
-  mutate(school_year_2019_20_21states = sum(school_year_2019_20)) |>   mutate(school_year_2020_2021_21states = sum(school_year_2020_2021)) |>
-  mutate(school_year_2021_22_21states = sum(school_year_2021_22)) |>
-  mutate(public_school_change_21states = school_year_2021_22_21states-school_year_2019_20_21states) 
+  
+  summarise(sum(total_change))
+  
   
 
 # Display results of code below this codeblock
@@ -98,24 +101,18 @@ enrollment_changes |>
 # Put code to reverse engineer sentence here
 
 enrollment_changes |>
-  group_by(enrollment_type) |>
+  
   filter(enrollment_type == 'Private enrollment') |>
   filter(state_abbrev == 'CA' | state_abbrev == 'NY' | state_abbrev == 'LA' | state_abbrev == 'NC' | state_abbrev == 'WA' | state_abbrev == 'CO' | state_abbrev == 'GA' | state_abbrev == 'MN' | state_abbrev == 'WI' | state_abbrev == 'NH' | state_abbrev == 'MA' | state_abbrev == 'MT' | state_abbrev == 'DE' | state_abbrev == 'ND' | state_abbrev == 'DC' | state_abbrev == 'SD' | state_abbrev == 'SC' | state_abbrev == 'NE' | state_abbrev == 'RI' | state_abbrev == 'TN' | state_abbrev == 'PA' | state_abbrev == 'FL') |>
-  mutate(private_year_19_20 = sum(school_year_2019_20)) |>   
-  mutate(private_year_20_21 = sum(school_year_2020_2021)) |>
-  mutate(private_year_21_22 = sum(school_year_2021_22)) |>
-  mutate(total_private_change = private_year_21_22 - private_year_19_20) |> 
+
   summarize(sum(total_change))
   
 
 enrollment_changes |>
-  group_by(enrollment_type) |>
+ 
   filter(enrollment_type == 'Homeschool enrollment') |>
   filter(state_abbrev == 'CA' | state_abbrev == 'NY' | state_abbrev == 'LA' | state_abbrev == 'NC' | state_abbrev == 'WA' | state_abbrev == 'CO' | state_abbrev == 'GA' | state_abbrev == 'MN' | state_abbrev == 'WI' | state_abbrev == 'NH' | state_abbrev == 'MA' | state_abbrev == 'MT' | state_abbrev == 'DE' | state_abbrev == 'ND' | state_abbrev == 'DC' | state_abbrev == 'SD' | state_abbrev == 'SC' | state_abbrev == 'NE' | state_abbrev == 'RI' | state_abbrev == 'TN' | state_abbrev == 'PA' | state_abbrev == 'FL') |>
-  mutate(homeschool_year_19_20 = sum(school_year_2019_20)) |>   
-  mutate(homeschool_year_20_21 = sum(school_year_2020_2021)) |>
-  mutate(homeschool_year_21_22 = sum(school_year_2021_22)) |>
-  mutate(total_homeschool_change = homeschool_year_21_22 - homeschool_year_19_20) |> 
+
   summarize(sum(total_change))
 
 # Display results of code below this codeblock
@@ -125,18 +122,32 @@ enrollment_changes |>
 ### Sentence 3
 
 * **Sentence text**: "California alone showed over 150,000 missing students in the data, and New York had nearly 60,000."
-* **Analysis summary**: We were not able to reproduce the 150,000 missing students for California due to an issue running the code.
+* **Analysis summary**: We found the changes in public and non-public enrollment for New York and California and added the changes in public and non-public enrollment for each state. We then subtracted the change in school age population for each state.
+
+#"join" data sets by "state" 
+#"Gap" population difference year to year
+
 
 ```{r}
 # Put code to reverse engineer sentence here
 
-california_data <- merge(school_aged_population_changes |> 
-  filter(state == 'California') |>
-  reframe(state, change_in_school_aged_population_5_17), enrollment_changes |>
-  filter(enrollment_type == 'Public school enrollment' | enrollment_type == 'Total nonpublic enrollment (private + homeschool)') |>
-  filter(state_abbrev == 'CA') |>
-  reframe(state_abbrev, sum(total_change)) |>
-  mutate(missing_students = sum(total_change) - change_in_school_aged_population_5_17))
+public_enrollment_changes <- enrollment_changes |>
+  filter(enrollment_type == 'Public school enrollment') |>
+  filter(state_abbrev == 'CA' | state_abbrev == 'NY' ) |> select(state, total_change)
+
+non_public_enrollment_changes <- enrollment_changes |>
+  filter(enrollment_type == 'Total nonpublic enrollment (private + homeschool)') |>
+  filter(state_abbrev == 'CA' | state_abbrev == 'NY' ) |> select(state, total_change)
+
+enrollment_changes_ca_ny <- non_public_enrollment_changes |> inner_join(public_enrollment_changes, by = 'state')
+
+school_age_change <- school_aged_population_changes |> filter(state == 'California' | state == 'New York') |> select(state, change_in_school_aged_population_5_17)
+
+age_enrollment_change <- enrollment_changes_ca_ny |> inner_join(school_age_change, by = 'state')
+
+age_enrollment_change |> rename(public_enrollment_change = total_change.x) |>
+rename(nonpublic_enrollment_change = total_change.y) |>
+mutate(missing_students = public_enrollment_change + nonpublic_enrollment_change - change_in_school_aged_population_5_17 ) 
 
 # Display results of code below this codeblock
 
@@ -149,6 +160,8 @@ california_data <- merge(school_aged_population_changes |>
 
 ```{r}
 # Put code to reverse engineer sentence here
+
+
 
 # Display results of code below this codeblock
 
