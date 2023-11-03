@@ -39,17 +39,17 @@ In this section, describe the source of the data, write a basic data dictionary 
 ```{r}
 # Load required data
 
-population_by_age <- population_by_age |>
+population_by_age <- 'data/population_by_age.csv' |>
   clean_names()
-private_enrollment_by_grade <- private_enrollment_by_grade |>
+private_enrollment_by_grade <- 'data/private_enrollment_by_grade.csv' |>
   clean_names()
-public_enrollment_by_grade <- public_enrollment_by_grade |>
+public_enrollment_by_grade <- 'data/public_enrollment_by_grade.csv' |>
   clean_names() 
-missing_kids_analysis <- Missing_Kids_Analysis |>
+missing_kids_analysis <- 'data/Missing_Kids_Analysis.csv' |>
   clean_names()
-school_aged_population_changes <- School_Aged_Population_Changes |>
+school_aged_population_changes <- 'data/School_Aged_Population_Changes.csv' |>
   clean_names()
-enrollment_changes <- Enrollment_Changes |>
+enrollment_changes <- 'data/Enrollment_Changes.csv' |>
   clean_names()
 
 
