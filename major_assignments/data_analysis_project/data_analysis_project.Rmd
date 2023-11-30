@@ -1,0 +1,32 @@
+---
+title: "Data Analysis Project"
+output: html_notebook
+---
+
+```{r}
+#Load and clean the data
+womens_basketball_stats <- read_csv("data/womens_basketball_stats.csv") |> clean_names()
+
+umd_roster <- read_csv("data/umd_roster.csv") |> clean_names()
+```
+
+```{r}
+#Shows basic exploratory analysis to demonstrate an understanding of the dataset, including the number of rows and columns, any obvious limitations or flaws and any reasons why it might not be able to answer the questions you've listed last week.
+umd_roster |>
+  group_by(ht) |>
+  summarise(count = n()) |>
+  arrange(desc(ht))
+
+```
+
+Limitations:
+
+The data does not include much information other than the average heights of the players and the hometowns. We want to learn more about the descriptive statistics. That is where the next data set comes in.
+
+```{r}
+#Shows basic exploratory analysis to demonstrate an understanding of the dataset, including the number of rows and columns, any obvious limitations or flaws and any reasons why it might not be able to answer the questions you've listed last week.
+womens_basketball_stats |>
+  group_by(avg_23, number_player)
+```
+
+Q1: Describe the limits of the data in terms of timeframe, what is and is not included and any codes or other information you'd need to find definitions for, and what you've done to better define it.
