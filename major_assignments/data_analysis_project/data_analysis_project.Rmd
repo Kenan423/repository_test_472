@@ -26,7 +26,8 @@ The data does not include much information other than the average heights of the
 ```{r}
 #Shows basic exploratory analysis to demonstrate an understanding of the dataset, including the number of rows and columns, any obvious limitations or flaws and any reasons why it might not be able to answer the questions you've listed last week.
 womens_basketball_stats |>
-  group_by(avg_23, number_player)
+  group_by(avg_23, number_player) |>
+  arrange(desc(avg_23))
 ```
 
 Q1: Describe the limits of the data in terms of timeframe, what is and is not included and any codes or other information you'd need to find definitions for, and what you've done to better define it.
