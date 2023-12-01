@@ -38,7 +38,7 @@ To answer this question, we'll use the text of those releases. We have the URLs 
 
 ### Task 2: Read in data
 
-**Task** Run the following code and describe the dataframe it outputs. **Answer**
+**Task** Run the following code and describe the dataframe it outputs. **Answer** The data shows the titles and url's.
 
 ```{r}
 releases <- read_rds("data/cardin_releases.rds")
@@ -88,7 +88,7 @@ If you are trying to create a list of unique words, R will treat differences in 
 
 ### Task 5: Trying out unique
 
-**Task** Run the following code and describe what the `unique` function does to the original list of words. **Answer**
+**Task** Run the following code and describe what the `unique` function does to the original list of words. **Answer** The unique list of words categorizes the following words as unique so they are easy to target.
 
 ```{r}
 a_list_of_words <- c("Dog", "dog", "dog", "cat", "cat", ",")
@@ -99,7 +99,7 @@ Fortunately, this is a solved problem with tidytext, which has a function called
 
 ### Task 6: Trying out unnest_tokens
 
-**Task** Run the following code and describe the output of using the `unnest_tokens` function. **Answer**
+**Task** Run the following code and describe the output of using the `unnest_tokens` function. **Answer** The output lists all the unique words individually.
 
 ```{r}
 unique_words <- releases |> select(text) |>
@@ -109,7 +109,7 @@ View(unique_words)
 
 ### Task 7: Make a column chart
 
-**Task** Run the following code and describe what the resulting graphic shows. Is it interesting? **Answer**
+**Task** Run the following code and describe what the resulting graphic shows. Is it interesting? **Answer** The graphic shows the most common words, which are simple and basic ones like "the" and "and."
 
 Now we can look at the top words in this dataset. Let's limit ourselves to making a plot of the top 25 words, and we'll use the function `count` to do the counting:
 
@@ -198,7 +198,7 @@ Then we can create top 10 lists for both of them and compare:
 
 ### Task 11: Create dataframes with the top 10 words in each year
 
-**Task** Run the following code and describe the results. **Answer**
+**Task** Run the following code and describe the results. **Answer** The results show the number of times the word is used and the percentage it is used.
 
 ```{r}
 unique_words_2021 |>
@@ -243,7 +243,7 @@ So this block is is going to do the following:
 
 ### Task 12: Create a dataframe with the top 10 two-word phrases for 2021
 
-**Task** Run the following code and describe the results. **Answer**
+**Task** Run the following code and describe the results. **Answer** The most used pairs of words are listed in order of frequency.
 
 ```{r}
 releases |>
