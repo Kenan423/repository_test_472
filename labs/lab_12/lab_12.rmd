@@ -79,7 +79,7 @@ unique_words_no_stop_words |>
 
 ```
 
-**A1.**
+**A1.** The leading word in the list is "failing." Broadly, I think the top 10 words describe the profession of being an attorney and the topic of attorneys being sanctioned for misconduct. 
 
 ------------------------------------------------------------------------
 
@@ -102,7 +102,7 @@ md_attorney_sanctions |>
 
 ```
 
-**A2.**
+**A2.** The top trigram is "attorney trust account" and it appears 343 times. An attornye trust account is a bank account where client's funds are kept.
 
 ------------------------------------------------------------------------
 
