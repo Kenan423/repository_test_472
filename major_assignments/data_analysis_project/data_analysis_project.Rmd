@@ -4,14 +4,36 @@ output: html_notebook
 ---
 
 ```{r}
-#Load and clean the data
-womens_basketball_stats <- read_csv("data/womens_basketball_stats.csv") |> clean_names()
-
-umd_roster <- read_csv("data/umd_roster.csv") |> clean_names()
+#Load libraries
+library(janitor)
+library(tidyverse)
 ```
 
 ```{r}
-#Shows basic exploratory analysis to demonstrate an understanding of the dataset, including the number of rows and columns, any obvious limitations or flaws and any reasons why it might not be able to answer the questions you've listed last week.
+#Load the data sets and clean the column names
+womens_basketball_stats <- read_csv("data/womens_basketball_stats.csv") |> clean_names()
+
+umd_roster <- read_csv("data/umd_roster.csv") |> clean_names()
+
+tabula_margin <-read_csv("data/tabula-Margin.csv") |> clean_names()
+
+tabula_offense <- read_csv("data/tabula-Offense.csv") |> clean_names()
+
+tabula_scoring_defense <- read_csv("data/tabula-ScoringDefense.csv") |> clean_names()
+
+tabula_2023_2024_Women_fixed <-
+  read_csv("data/tabula_2023_2024_Women_fixed.csv") |> clean_names()
+
+tabula-womens-offense-defense <- 
+  read_csv("data/tabula-womens-offense-defense.csv") |> clean_names()
+
+wbb_majors <- read_csv("data/wbb_majors.csv") |> clean_names()
+
+```
+
+1.  How tall are the players on the University of Maryland women's basketball team? Which player is the tallest? Answer:
+
+```{r}
 umd_roster |>
   group_by(ht) |>
   summarise(count = n()) |>
@@ -19,15 +41,77 @@ umd_roster |>
 
 ```
 
-Limitations:
-
-The data does not include much information other than the average heights of the players and the hometowns. We want to learn more about the descriptive statistics. That is where the next data set comes in.
+2.  Which University of Maryland women's basketball players score the highest points in games? Answer:
 
 ```{r}
-#Shows basic exploratory analysis to demonstrate an understanding of the dataset, including the number of rows and columns, any obvious limitations or flaws and any reasons why it might not be able to answer the questions you've listed last week.
 womens_basketball_stats |>
   group_by(avg_23, number_player) |>
   arrange(desc(avg_23))
 ```
 
-Q1: Describe the limits of the data in terms of timeframe, what is and is not included and any codes or other information you'd need to find definitions for, and what you've done to better define it.
+3.  In a few steps, Join the two data sets together (hintby changing the column names and the column item format to match each other):
+
+```{r}
+womens_basketball_stats<- womens_basketball_stats |>
+  rename(name = "number_player")
+```
+
+```{r}
+womens_basketball_stats <- womens_basketball_stats |>
+  separate(name, c('name1', 'name2', 'name3'))
+
+```
+
+```{r}
+womens_basketball_stats <-womens_basketball_stats |>
+  mutate(new_name = paste(name3, name2, sep=" "))
+
+```
+
+```{r}
+basketball_stats <- umd_roster |>
+  inner_join(womens_basketball_stats, by=c("name" = "new_name"))
+
+```
+
+
+4. What do the players study at UMD? Answer:
+
+
+```{r}
+womens_basketball_stats <- womens_basketball_stats |>
+  inner_join(wbb_majors, by=c("new_name"))
+
+
+womens_basketball_stats |>
+group_by(new_name, major.x) |>
+  summarise(major.x) |>
+arrange(major.x)
+
+```
+
+
+
+
+
+5. How do the players at UMD compare to players of the same positions outside UMD? Are UMD centers taller or shorter than the average? (using new data set)
+
+```{r}
+tabula_combined <- tabula_scoring_defense |>
+  left_join(tabula_offense, join_by(x1))
+
+```
+
+```{r}
+tabula_margin <- subset(tabula_margin, x1 != 3)
+
+```
+
+```{r}
+tabula_combined <- tabula_combined |>
+  left_join(tabula_combined, tabula_margin, by = " ")
+```
+
+Describe the limits of the data in terms of timeframe, what is and is not included and any codes or other information you'd need to find definitions for, and what you've done to better define it.
+
+In terms of timeframe, the datasets that we are working with are limited to the current Maryland women's basketball team, using information from the roster that was released at the beginning of the season. The first dataset, the roster data, includes biographical information about each player including their name, position, height, year, hometown and previous college that they transferred from if applicable. The second dataset we are considering is a compilation of stats only from the first seven games. These stats include metrics like games played, games started, minutes played, points, shooting percentage and rebounds. There are no metrics that we need to find definitions for, but we could add stats from the upcoming games if we so choose. Other information we need is the majors of each of the players, which was not included in the roster or statistics dataset. To answer another one of our original questions, we will also look for another dataset about the players' financial records from the last few years to get information on the resources and whether or not there are inequities for the women's basketball team.
