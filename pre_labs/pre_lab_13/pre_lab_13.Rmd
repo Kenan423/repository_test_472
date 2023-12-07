@@ -58,7 +58,7 @@ Let's start by plotting them to get a sense of the pattern.
 
 ### Task 3: Plot data
 
-**Task** Run the following code. Describe the plot. What pattern do you see? **Answer**
+**Task** Run the following code. Describe the plot. What pattern do you see? **Answer** There is some loose correlation. As the population increases gdp increases.
 
 ```{r}
 
@@ -75,7 +75,7 @@ Let's test another variable, the per-pupil education spending amount per state.
 
 ### Task 4: Plot data
 
-**Task** Run the following code. Describe the plot. What do you see? **Answer**
+**Task** Run the following code. Describe the plot. What do you see? **Answer** The slope is going slightly downward. There isn't much correlation.
 
 ```{r}
 
@@ -102,7 +102,7 @@ We can calculate r with a function from the corrr package called "correlate()". 
 
 ### Task 5: Correlate data
 
-**Task** Run the following code. Describe the table output in terms of the strength of relationships between the variables. What do you see? **Answer**
+**Task** Run the following code. Describe the table output in terms of the strength of relationships between the variables. What do you see? **Answer** pop_change_2021 and per_pupil_2021 have the strongest relationship, while gdp_growth_2021 and per_pupil_2021 have the weakest relationship.
 
 ```{r}
 state_data |>
@@ -118,7 +118,7 @@ The relationship between a state's per-pupil education spending and population g
 
 ### Task 6: Correlate data
 
-**Task** Run the following code. Describe the model output. What do you see? **Answer**
+**Task** Run the following code. Describe the model output. What do you see? **Answer** the cor is -0.411, t = -3.12, df = 48, and the p-value = 0.00301
 
 ```{r}
 
@@ -132,7 +132,7 @@ Now let's test another one, the relationship between the per_pupil_2021 and gdp_
 
 ### Task 7: Correlate data
 
-**Task** Run the following code. Describe the model output. What do you see? **Answer**
+**Task** Run the following code. Describe the model output. What do you see? **Answer** The cor is -0.059, t = -0.415, df = 48, and the p-value = 0.679
 
 ```{r}
 
@@ -158,7 +158,7 @@ We could just calculate the averages like we're used to doing.
 
 ### Task 8: Average data
 
-**Task** Run the following code. Describe the table. What do you see? **Answer**
+**Task** Run the following code. Describe the table. What do you see? **Answer** mean_gdp_growth was higher for Biden, mean_per_pupil_education was higher for Biden, and mean_pop_growth was higher for Trump.
 
 ```{r}
 state_data |>
@@ -178,7 +178,7 @@ A t-test can help us answer that question. It can tell us where there's a statis
 
 ### Task 9: Run t-test
 
-**Task** Run the following code. Describe the output. What do you see? **Answer**
+**Task** Run the following code. Describe the output. What do you see? **Answer** It displays the mean population change for both Biden and Trump. t = -1.828, df = 45.47, and the p-value = 0.07411.
 
 ```{r}
 t.test(pop_change_2021 ~ vote_2020, data = state_data)
@@ -190,7 +190,7 @@ Let's try per-pupil education spending.
 
 ### Task 10: Run t-test
 
-**Task** Run the following code. Describe the output. What do you see? **Answer** There is strong statistical significance for this data.
+**Task** Run the following code. Describe the output. What do you see? **Answer** There is strong statistical significance for this data. The mean in group Biden is higher than the mean in group Trump.
 
 ```{r}
 t.test(per_pupil_2021 ~ vote_2020, data = state_data)
